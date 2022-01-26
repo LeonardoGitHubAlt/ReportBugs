@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+<head>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=10, minimum-scale=1, width=device-width, minimal-ui">
+    <style>
+body {
+  margin: 0;
+  height:80vh;
+}
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 80vh;
+  width: 100vw;
+  background: #ebebeb;
+}
+
+.container > div {
+  display: flex;
+  justify-content: center;
+}
+
+input {
+  position: absolute;
+  bottom: 0;
+}
+</style>
+    <script>
+  function log(msg) {
+    console.log(msg);
+    var panel = document.querySelector('.panel');
+    if (panel.childElementCount >= 18) {
+        panel.removeChild(panel.firstChild);
+    }
+    var div = document.createElement('div');
+    div.innerText = msg;
+    panel.appendChild(div);
+  }
+  var count = 0;
+  var dumpSize = ()=>{
+      log('window.inner[' + window.innerWidth + ' x ' + window.innerHeight + ']');
+      log('window.outer[' + window.outerWidth + ' x ' + window.outerHeight + ']');
+      log('document.body[' + document.body.clientWidth + ' x ' + document.body.clientHeight + ']');
+      log('devicePixelRatio[' + devicePixelRatio + ']');
+      log('window[' + (devicePixelRatio * window.innerWidth) + ' x ' + (devicePixelRatio * window.innerHeight) + ']['
+            + (devicePixelRatio * window.outerWidth) + ' x ' + (devicePixelRatio * window.outerHeight) + ']');
+      log('--------------------------------->' + ++count);
+    };
+  function init() {
+    (function () {
+      window.addEventListener('resize', dumpSize);
+    })();
+    dumpSize();
+  }
+</script>
+</head>
+<body onload='init()'>
+<div class='panel'></div>
+<input type='text' value='input'></input>
+</body>
+</html>
