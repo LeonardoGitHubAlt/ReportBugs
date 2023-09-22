@@ -1,0 +1,81 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="initial-scale=1, maximum-scale=10, minimum-scale=1, width=device-width, minimal-ui">
+<style>
+body,html {
+  height: 100%;
+  margin: 0;
+}
+
+.container > div {
+  display: flex;
+  justify-content: center;
+  border: 1px solid;
+  margin: 1px;
+}
+</style>
+<script>
+  function log(msg) {
+    console.log(msg);
+    var panel = document.querySelector('.container');
+    if (panel.childElementCount > 25) {
+        panel.removeChild(panel.firstChild);
+    }
+    var div = document.createElement('div');
+    div.innerText = msg;
+    panel.appendChild(div);
+  }
+  var dumpTouches = (touches)=>{
+      var msg = '[';
+      for (touch of touches) {
+        msg += '{'
+        msg += 'screenX: ' + parseInt(touch.screenX) + ',';
+        msg += 'screenY: ' + parseInt(touch.screenY) + ',';
+        msg += '},'
+      }
+      msg += ']';
+      return msg;
+    };
+
+  alertTimer = (function() {
+    var timer = null;
+    function startAlertTimer() {
+      if (timer) {
+        return;
+      }
+      timer = setTimeout(()=>{
+        timer = null;
+        alert('webview loses focus');
+      }, 500);
+    }
+    function stopAlertTimer() {
+      if (timer) {
+        clearTimeout(timer);
+        timer = null;
+      }
+    }
+    return {
+      start: startAlertTimer,
+      stop: stopAlertTimer,
+    };
+  })();
+
+  function init() {
+    ['touchstart', 'touchcancel', 'touchend'].forEach((event_name)=>{
+      document.addEventListener(event_name, (evt) => {
+        log(event_name + ', touches.length:' + evt.touches.length);
+        if (event_name == 'touchstart' && evt.touches.length >= 2) {
+          alertTimer.start();
+        } else {
+          alertTimer.stop();
+        }
+      }, false)
+    });
+  }
+</script>
+</head>
+<body onload='init()'>
+  <div class='container'></div>
+</body>
+</html>
