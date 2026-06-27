@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>View Transitions: custom scrollbar</title>
+<style>
+@view-transition {
+  navigation: auto;
+}
+html {
+  background: blue;
+  overflow: scroll;
+}
+
+@layer {
+    ::-webkit-scrollbar {
+        background-color: hsl(0, 100%, 10%);
+        color: hsl(0, 100%, 90%);
+    }
+    ::-webkit-scrollbar-thumb {
+        background-color: hsl(0, 100%, 50%);
+    }
+    ::-webkit-scrollbar-corner {
+        background-color: hsl(0, 100%, 0%);
+    }
+}/**/
+
+</style>
+<script>
+function runTest() {
+  const url = "second.html";
+  window.location.replace(new URL(url, window.location));
+}
+onload = ()=> {
+  setTimeout(() => requestAnimationFrame(() => requestAnimationFrame(runTest)), 1000);
+}
+</script>
+</head>
+</html>
